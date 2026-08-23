@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Administrasi SMK</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="login-page">
+
+    <div class="login-container">
+
+        <div class="login-icon">
+            🔐
+        </div>
+
+        <h1>Administrasi SMK</h1>
+
+        <p class="login-description">
+            Sistem Administrasi Sekolah dengan keamanan
+            Cloud Security dan verifikasi dokumen berbasis Blockchain.
+        </p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/login">
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Masukkan username"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Masukkan password"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="login-button"
+            >
+                Masuk ke Sistem
+            </button>
+
+        </form>
+
+        <div class="login-security">
+            🛡️
+            <span>
+                Akses dilindungi dengan Role-Based Access Control
+            </span>
+        </div>
+
+    </div>
+
+</body>
+</html>

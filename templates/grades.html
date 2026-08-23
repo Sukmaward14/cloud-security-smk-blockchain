@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Data Nilai</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<nav>
+
+    <h2>Administrasi SMK</h2>
+
+    <a href="/dashboard">
+        Dashboard
+    </a>
+
+</nav>
+
+
+<div class="container">
+
+    <h1>Data Nilai</h1>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% for category, message in messages %}
+
+            <div class="alert">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endwith %}
+
+
+    {% if session["role"] == "guru" or session["role"] == "tu" %}
+
+    <h2>Tambah Nilai</h2>
+
+    <form
+        method="POST"
+        action="/grades/add"
+    >
+
+        <input
+            type="number"
+            name="student_id"
+            placeholder="ID Siswa"
+            required
+        >
+
+        <input
+            type="text"
+            name="subject"
+            placeholder="Mata Pelajaran"
+            required
+        >
+
+        <input
+            type="number"
+            name="score"
+            placeholder="Nilai"
+            min="0"
+            max="100"
+            required
+        >
+
+        <button type="submit">
+            Simpan Nilai
+        </button>
+
+    </form>
+
+    {% endif %}
+
+
+    <h2>Daftar Nilai</h2>
+
+    <table>
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>Siswa</th>
+
+            <th>Mata Pelajaran</th>
+
+            <th>Nilai</th>
+
+            <th>Guru</th>
+
+        </tr>
+
+
+        {% for grade in grades %}
+
+        <tr>
+
+            <td>
+                {{ grade.id }}
+            </td>
+
+            <td>
+                {{ grade.student_id }}
+            </td>
+
+            <td>
+                {{ grade.subject }}
+            </td>
+
+            <td>
+                {{ grade.score }}
+            </td>
+
+            <td>
+                {{ grade.teacher }}
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+
+</html>

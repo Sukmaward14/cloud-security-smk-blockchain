@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Data Siswa</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<nav>
+
+    <h2>Administrasi SMK</h2>
+
+    <a href="/dashboard">
+        Dashboard
+    </a>
+
+</nav>
+
+
+<div class="container">
+
+    <h1>Data Siswa</h1>
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% for category, message in messages %}
+
+            <div class="alert">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endwith %}
+
+
+    {% if session["role"] == "tu" %}
+
+    <h2>Tambah Siswa</h2>
+
+    <form
+        method="POST"
+        action="/students/add"
+    >
+
+        <input
+            type="text"
+            name="nis"
+            placeholder="NIS"
+            required
+        >
+
+        <input
+            type="text"
+            name="name"
+            placeholder="Nama siswa"
+            required
+        >
+
+        <input
+            type="text"
+            name="class_name"
+            placeholder="Kelas"
+            required
+        >
+
+        <button type="submit">
+            Tambah
+        </button>
+
+    </form>
+
+    {% endif %}
+
+
+    <h2>Daftar Siswa</h2>
+
+    <table>
+
+        <tr>
+
+            <th>ID</th>
+
+            <th>NIS</th>
+
+            <th>Nama</th>
+
+            <th>Kelas</th>
+
+        </tr>
+
+
+        {% for student in students %}
+
+        <tr>
+
+            <td>
+                {{ student.id }}
+            </td>
+
+            <td>
+                {{ student.nis }}
+            </td>
+
+            <td>
+                {{ student.name }}
+            </td>
+
+            <td>
+                {{ student.class_name }}
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</div>
+
+</body>
+
+</html>

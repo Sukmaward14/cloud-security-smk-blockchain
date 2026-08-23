@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Dashboard - Administrasi SMK
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <nav>
+
+
+        <div class="nav-brand">
+
+
+            <div class="nav-logo">
+
+                🏫
+
+            </div>
+
+
+            <div>
+
+                <div class="nav-title">
+
+                    Administrasi SMK
+
+                </div>
+
+
+                <span class="nav-subtitle">
+
+                    Cloud Security & Blockchain
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="nav-links">
+
+
+            <span class="nav-user">
+
+                👤 {{ session["username"] }}
+
+                ·
+
+                {{ session["role"]|upper }}
+
+            </span>
+
+
+            <a href="/dashboard">
+
+                Dashboard
+
+            </a>
+
+
+            <a href="/logout">
+
+                Logout
+
+            </a>
+
+
+        </div>
+
+
+    </nav>
+
+
+    <!-- =========================
+         CONTENT
+    ========================== -->
+
+    <div class="container">
+
+
+        <!-- WELCOME -->
+
+        <section class="dashboard-welcome">
+
+
+            <h1>
+
+                Selamat Datang,
+                {{ session["username"] }}
+
+            </h1>
+
+
+            <p>
+
+                Kelola data administrasi sekolah
+                dengan sistem keamanan dan
+                verifikasi dokumen berbasis blockchain.
+
+            </p>
+
+
+            <span class="dashboard-role">
+
+                Role:
+                {{ session["role"]|upper }}
+
+            </span>
+
+
+        </section>
+
+
+        <!-- FLASH MESSAGE -->
+
+        {% with messages =
+            get_flashed_messages(
+                with_categories=true
+            )
+        %}
+
+            {% if messages %}
+
+                {% for category, message in messages %}
+
+                    <div
+                        class="alert alert-{{ category }}"
+                    >
+
+                        {{ message }}
+
+                    </div>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <!-- STATISTIK -->
+
+        <div class="cards">
+
+
+            <!-- TOTAL SISWA -->
+
+            <div class="card">
+
+
+                <div class="card-top">
+
+
+                    <h3>
+                        TOTAL SISWA
+                    </h3>
+
+
+                    <div
+                        class="
+                            card-icon
+                            icon-blue
+                        "
+                    >
+
+                        👨‍🎓
+
+                    </div>
+
+
+                </div>
+
+
+                <p>
+
+                    {{ students_count }}
+
+                </p>
+
+
+            </div>
+
+
+            <!-- TOTAL NILAI -->
+
+            <div class="card">
+
+
+                <div class="card-top">
+
+
+                    <h3>
+                        TOTAL NILAI
+                    </h3>
+
+
+                    <div
+                        class="
+                            card-icon
+                            icon-green
+                        "
+                    >
+
+                        📊
+
+                    </div>
+
+
+                </div>
+
+
+                <p>
+
+                    {{ grades_count }}
+
+                </p>
+
+
+            </div>
+
+
+            <!-- SECURITY -->
+
+            <div class="card">
+
+
+                <div class="card-top">
+
+
+                    <h3>
+                        KEAMANAN SISTEM
+                    </h3>
+
+
+                    <div
+                        class="
+                            card-icon
+                            icon-purple
+                        "
+                    >
+
+                        🔐
+
+                    </div>
+
+
+                </div>
+
+
+                <p
+                    style="
+                        font-size: 20px;
+                        color: #16a34a;
+                    "
+                >
+
+                    Aktif
+
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+        <!-- MENU -->
+
+        <section class="dashboard-section">
+
+
+            <h2 class="dashboard-section-title">
+
+                Menu Utama
+
+            </h2>
+
+
+            <div class="menu">
+
+
+                <!-- DATA SISWA -->
+
+                <a href="/students">
+
+
+                    <div class="menu-icon">
+
+                        👨‍🎓
+
+                    </div>
+
+
+                    <div class="menu-text">
+
+                        <strong>
+
+                            Data Siswa
+
+                        </strong>
+
+
+                        <span>
+
+                            Kelola data siswa SMK
+
+                        </span>
+
+                    </div>
+
+
+                </a>
+
+
+                <!-- DATA NILAI -->
+
+                <a href="/grades">
+
+
+                    <div class="menu-icon">
+
+                        📊
+
+                    </div>
+
+
+                    <div class="menu-text">
+
+                        <strong>
+
+                            Data Nilai
+
+                        </strong>
+
+
+                        <span>
+
+                            Kelola dan lihat nilai siswa
+
+                        </span>
+
+                    </div>
+
+
+                </a>
+
+
+                <!-- DOKUMEN -->
+
+                <a href="/documents">
+
+
+                    <div class="menu-icon">
+
+                        📄
+
+                    </div>
+
+
+                    <div class="menu-text">
+
+                        <strong>
+
+                            Dokumen
+
+                        </strong>
+
+
+                        <span>
+
+                            Upload dan verifikasi
+                            ijazah dengan blockchain
+
+                        </span>
+
+                    </div>
+
+
+                </a>
+
+
+            </div>
+
+
+        </section>
+
+
+    </div>
+
+
+</body>
+
+</html>

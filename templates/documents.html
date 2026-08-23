@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manajemen Dokumen</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<nav>
+
+    <h2>Administrasi SMK</h2>
+
+    <div>
+
+        <span>
+            {{ session["username"] }} - {{ session["role"] }}
+        </span>
+
+        <a href="/dashboard">
+            Dashboard
+        </a>
+
+        <a href="/logout">
+            Logout
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="document-page">
+
+    <h1>Manajemen Dokumen</h1>
+
+
+    <!-- PESAN -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- =========================
+         FORM UPLOAD
+    ========================== -->
+
+    {% if session["role"] == "tu" %}
+
+    <div class="document-card">
+
+        <h2>Upload Dokumen Siswa</h2>
+
+        <form
+            action="/documents/upload"
+            method="POST"
+            enctype="multipart/form-data"
+            class="document-form"
+        >
+
+            <!-- SISWA -->
+
+            <div class="form-group">
+
+                <label for="student_id">
+                    Siswa
+                </label>
+
+                <select
+                    name="student_id"
+                    id="student_id"
+                    required
+                >
+
+                    <option value="">
+                        -- Pilih Siswa --
+                    </option>
+
+                    {% for student in students %}
+
+                    <option value="{{ student.id }}">
+
+                        {{ student.nis }} - {{ student.name }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+
+            <!-- JENIS DOKUMEN -->
+
+            <div class="form-group">
+
+                <label for="document_type">
+                    Jenis Dokumen
+                </label>
+
+                <select
+                    name="document_type"
+                    id="document_type"
+                    required
+                >
+
+                    <option value="">
+                        -- Pilih Jenis Dokumen --
+                    </option>
+
+                    <option value="Ijazah">
+                        Ijazah
+                    </option>
+
+                    <option value="Transkrip Nilai">
+                        Transkrip Nilai
+                    </option>
+
+                    <option value="Sertifikat PKL">
+                        Sertifikat PKL
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- FILE -->
+
+            <div class="form-group full-width">
+
+                <label for="file">
+                    File Dokumen PDF
+                </label>
+
+                <input
+                    type="file"
+                    name="file"
+                    id="file"
+                    accept=".pdf"
+                    required
+                >
+
+                <small>
+                    Format PDF, maksimal 10 MB.
+                </small>
+
+            </div>
+
+
+            <!-- BUTTON -->
+
+            <button type="submit">
+
+                Upload Dokumen
+
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =========================
+         DAFTAR DOKUMEN
+    ========================== -->
+
+    <div class="document-card">
+
+        <h2>Daftar Dokumen</h2>
+
+        <div class="document-table-wrapper">
+
+            <table class="document-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Siswa</th>
+
+                        <th>Jenis Dokumen</th>
+
+                        <th>File</th>
+
+                        <th>SHA-256</th>
+
+                        <th>Uploader</th>
+
+                        <th>Verifikasi</th>
+
+                        <th>Aksi</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for document in documents %}
+
+                    <tr>
+
+                        <td>
+                            {{ document.id }}
+                        </td>
+
+                        <td>
+                            {{ document.student_id }}
+                        </td>
+
+                        <td>
+                            {{ document.document_type }}
+                        </td>
+
+                        <td>
+                            {{ document.filename }}
+                        </td>
+
+                        <td class="hash">
+                            {{ document.file_hash }}
+                        </td>
+
+                        <td>
+                            {{ document.uploaded_by }}
+                        </td>
+                        <td>
+
+                            <a
+                                href="/documents/verify/{{ document.id }}"
+                                class="verify-button"
+                            >
+                                Verifikasi
+                            </a>
+
+                        </td>
+
+                        <td>
+
+                            {% if session["role"] == "tu" %}
+
+                            <form
+                                action="/documents/delete/{{ document.id }}"
+                                method="POST"
+                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus dokumen ini?');"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="delete-button"
+                                >
+                                    Hapus
+                                </button>
+
+                            </form>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td colspan="8">
+                            Belum ada dokumen.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
